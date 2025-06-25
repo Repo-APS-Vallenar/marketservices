@@ -47,4 +47,9 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    public function serviceProvider()
+    {
+        return $this->hasOne(\App\Models\ServiceProvider::class);
+    }
 }

@@ -14,16 +14,21 @@ class ServiceProviderController extends Controller
     {
         $serviceProvider = Auth::user()->serviceProvider;
         if (!$serviceProvider) {
-            return response()->json(['message' => 'Proveedor de servicios no encontrado'], 404);
+            abort(403, 'Proveedor de servicios no encontrado');
         }
-        $services = $serviceProvider->services;
-        $bookings = $serviceProvider->bookings()->latest()->get();
 
-        return response()->json([
-            'serviceProvider' => $serviceProvider,
-            'services' => $services,
-            'bookings' => $bookings
-        ]);
+        $pendingCount = $serviceProvider->bookings()->where('status', 'pending')->count();
+        $upcomingCount = $serviceProvider->bookings()->where('status', 'confirmed')->where('scheduled_at', '>=', now())->count();
+        $completedCount = $serviceProvider->bookings()->where('status', 'completed')->count();
+        $upcomingBookings = $serviceProvider->bookings()
+            ->with(['customer', 'service'])
+            ->whereIn('status', ['pending', 'confirmed'])
+            ->where('scheduled_at', '>=', now())
+            ->orderBy('scheduled_at')
+            ->limit(5)
+            ->get();
+
+        return view('provider.dashboard', compact('pendingCount', 'upcomingCount', 'completedCount', 'upcomingBookings'));
     }
 
     public function updateProfile(Request $request)

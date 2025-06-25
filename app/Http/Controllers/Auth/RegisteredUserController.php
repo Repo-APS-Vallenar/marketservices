@@ -43,6 +43,12 @@ class RegisteredUserController extends Controller
             'role' => $request->role,
         ]);
 
+        if ($user->role === 'service_provider') {
+            \App\Models\ServiceProvider::create([
+                'user_id' => $user->id,
+            ]);
+        }
+
         event(new Registered($user));
 
         Auth::login($user);
