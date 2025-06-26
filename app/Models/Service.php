@@ -29,8 +29,17 @@ class Service extends Model
         return $this->belongsTo(Category::class);
     }
 
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
     public function bookings()
     {
         return $this->hasMany(Booking::class);
     }
-} 
+    public function services()
+    {
+        return $this->hasMany(Service::class);
+    }
+}

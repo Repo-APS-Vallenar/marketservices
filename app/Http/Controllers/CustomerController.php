@@ -13,7 +13,11 @@ class CustomerController extends Controller
     public function dashboard()
     {
         $user = Auth::user();
-        $bookings = $user->bookings()->with(['serviceProvider.user', 'service'])->latest()->get();
+        // Llamando a la relación 'customerBookings' que está definida en el modelo User
+        $bookings = $user->bookings
+            ->with(['serviceProvider.user', 'service'])
+            ->orderBy('scheduled_at', 'desc')
+            ->paginate(10);
         return response()->json(['user' => $user, 'bookings' => $bookings]);
     }
 
@@ -26,6 +30,10 @@ class CustomerController extends Controller
             'notes' => 'nullable|string',
         ]);
 
+        // Opcional: Para asignar 'total_price', deberías obtener el servicio aquí
+        // Asegúrate de importar el modelo Service si lo necesitas aquí: use App\Models\Service;
+        // $service = \App\Models\Service::find($request->service_id);
+
         $booking = Booking::create([
             'customer_id' => Auth::id(),
             'service_provider_id' => $request->service_provider_id,
@@ -34,6 +42,7 @@ class CustomerController extends Controller
             'notes' => $request->notes,
             'status' => 'pending',
             'payment_status' => 'pending',
+            // 'total_price' => $service->price ?? 0, // Descomentar si implementas lo anterior
         ]);
 
         return response()->json(['message' => 'Reserva creada exitosamente', 'booking' => $booking], 201);
@@ -80,4 +89,4 @@ class CustomerController extends Controller
 
         return response()->json(['message' => 'Reseña agregada exitosamente', 'review' => $review], 201);
     }
-} 
+}

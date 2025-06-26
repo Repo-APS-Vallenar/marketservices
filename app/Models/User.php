@@ -3,15 +3,18 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Models\Booking;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Spatie\Permission\Traits\HasRoles; // Importante para que hasRole() funcione
 
 class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasApiTokens, HasFactory, Notifiable;
+    use HasRoles; // Este trait de Spatie añade el método hasRole() y otros.
 
     /**
      * The attributes that are mass assignable.
@@ -22,7 +25,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-        'role',
+        'role', // Asegúrate de que 'role' esté aquí si lo usas para roles básicos
     ];
 
     /**
@@ -44,8 +47,17 @@ class User extends Authenticatable
     {
         return [
             'email_verified_at' => 'datetime',
-            'password' => 'hashed',
+            'password' => 'string',
         ];
+    }
+
+    /**
+     * Get the bookings for the customer.
+     * Relación para obtener las reservas de un usuario (cuando actúa como cliente).
+     */
+    public function bookings() // Nombre de la relación
+    {
+        return $this->hasMany(Booking::class, 'customer_id');
     }
 
     public function serviceProvider()

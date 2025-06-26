@@ -19,4 +19,9 @@ class Category extends Model
     {
         return $this->hasMany(Service::class);
     }
-} 
+
+    public function serviceProviders()
+    {
+        return $this->belongsToMany(ServiceProvider::class); // Laravel infiere la tabla pivote 'category_service_provider'
+    }
+}

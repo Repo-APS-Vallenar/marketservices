@@ -11,14 +11,19 @@
             @error('name')<div class="text-red-600 text-sm">{{ $message }}</div>@enderror
         </div>
         <div>
-            <label class="block font-medium">Categoría</label>
-            <select name="category_id" class="w-full border rounded px-3 py-2" required>
+            <label for="service-category" class="block text-sm font-medium text-gray-700 mb-1">Categoría</label>
+            <select id="service-category" name="category_id"
+                x-model="serviceCategoryId"
+                class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 transition-colors duration-200"
+                required>
                 <option value="">Selecciona una categoría</option>
-                @foreach($categories as $category)
-                    <option value="{{ $category->id }}" @selected(old('category_id') == $category->id)>{{ $category->name }}</option>
+                @foreach($categories as $category) {{-- Asegúrate de que $categories venga filtrado del controlador --}}
+                <option value="{{ $category->id }}">
+                    {{ $category->name }}
+                </option>
                 @endforeach
             </select>
-            @error('category_id')<div class="text-red-600 text-sm">{{ $message }}</div>@enderror
+            @error('category_id')<div class="mt-1 text-red-600 text-sm">{{ $message }}</div>@enderror
         </div>
         <div>
             <label class="block font-medium">Descripción</label>
@@ -48,4 +53,4 @@
         </div>
     </form>
 </div>
-@endsection 
+@endsection

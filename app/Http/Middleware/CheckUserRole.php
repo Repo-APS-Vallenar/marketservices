@@ -10,14 +10,20 @@ class CheckUserRole
 {
     /**
      * Handle an incoming request.
-     *
-     * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      */
-    public function handle(Request $request, Closure $next, $role): Response
+    public function handle(Request $request, Closure $next, $roles): Response
     {
-        if (!$request->user() || $request->user()->role !== $role) {
-            return response()->json(['message' => 'Acceso denegado. Rol insuficiente.'], 403);
+        if (!$request->user()) {
+            abort(403, 'No has iniciado sesión.');
         }
+
+        $allowedRoles = is_array($roles) ? $roles : explode(',', $roles);
+        $allowedRoles = array_map('trim', $allowedRoles);
+
+        if (!in_array($request->user()->role, $allowedRoles)) {
+            abort(403, 'No tienes permisos suficientes para acceder a esta sección.');
+        }
+
         return $next($request);
     }
-} 
+}
