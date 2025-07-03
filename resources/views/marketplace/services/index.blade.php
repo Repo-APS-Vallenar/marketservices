@@ -87,7 +87,8 @@ Marketplace de Servicios
                                 <span class="text-sm text-gray-500">Por {{ $service->serviceProvider->user->name }}</span>
                                 <button
                                     type="button"
-                                    data-service='@json($service->load(["category", "serviceProvider.user"]))'
+                                    {{-- Asegúrate de cargar todas las relaciones necesarias para el modal --}}
+                                    data-service='@json($service->load(["category", "serviceProvider.user", "serviceProvider.categories"]))'
                                     @click="openDetailsModal(JSON.parse($el.getAttribute('data-service')))" class="w-full sm:w-auto mt-2 sm:mt-0 inline-flex items-center justify-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-indigo-700 bg-indigo-100 hover:bg-indigo-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition">
                                     Ver detalles
                                 </button>
@@ -120,7 +121,7 @@ Marketplace de Servicios
             </button>
             <template x-if="selectedService">
                 <div>
-                    <!-- Encabezado -->
+                    <!-- Encabezado del Servicio -->
                     <div class="flex items-center justify-between border-b pb-4">
                         <div>
                             <h1 class="text-2xl font-bold text-gray-900" x-text="selectedService.name"></h1>
@@ -133,19 +134,49 @@ Marketplace de Servicios
                             <div class="text-sm text-gray-500" x-text="'por ' + selectedService.price_unit"></div>
                         </div>
                     </div>
+                    
                     <!-- Información del proveedor -->
                     <div class="mt-6 border-b pb-4">
-                        <h2 class="text-lg font-semibold mb-2">Proveedor del Servicio</h2>
+                        <h2 class="text-lg font-semibold mb-2">Información del Proveedor</h2>
                         <div class="flex items-center">
-                            {{-- Considera agregar un avatar o imagen del proveedor aquí --}}
-                            <div class="ml-4">
-                                <div class="text-sm font-medium text-gray-900" x-text="selectedService.service_provider?.user?.name"></div>
+                            {{-- Foto de Perfil del Proveedor --}}
+                            <template x-if="selectedService.service_provider?.profile_picture">
+                                <img :src="'/storage/' + selectedService.service_provider.profile_picture.replace('public/', '')" alt="Foto de Perfil" class="h-16 w-16 rounded-full object-cover mr-4">
+                            </template>
+                            <template x-if="!selectedService.service_provider?.profile_picture">
+                                <img src="https://placehold.co/64x64/cccccc/333333?text=SP" alt="Sin Foto" class="h-16 w-16 rounded-full object-cover mr-4">
+                            </template>
+                            
+                            <div>
+                                <div class="text-lg font-medium text-gray-900" x-text="selectedService.service_provider?.user?.name"></div>
                                 <template x-if="selectedService.service_provider?.company_name">
                                     <div class="text-sm text-gray-500" x-text="selectedService.service_provider.company_name"></div>
                                 </template>
+                                <template x-if="selectedService.service_provider?.certification">
+                                    <div class="text-sm text-gray-500">Certificación: <span x-text="selectedService.service_provider.certification"></span></div>
+                                </template>
                             </div>
                         </div>
+                        <template x-if="selectedService.service_provider?.bio">
+                            <p class="mt-3 text-gray-700 text-sm" x-text="selectedService.service_provider.bio"></p>
+                        </template>
+                        <template x-if="selectedService.service_provider?.service_areas">
+                            <p class="mt-1 text-gray-600 text-sm">Áreas de Servicio: <span x-text="selectedService.service_provider.service_areas"></span></p>
+                        </template>
+
+                        {{-- Categorías que ofrece el proveedor (no solo las del servicio actual) --}}
+                        <template x-if="selectedService.service_provider?.categories && selectedService.service_provider.categories.length > 0">
+                            <div class="mt-3">
+                                <span class="text-sm font-medium text-gray-700">Categorías que ofrece:</span>
+                                <div class="flex flex-wrap gap-2 mt-1">
+                                    <template x-for="cat in selectedService.service_provider.categories" :key="cat.id">
+                                        <span class="px-2 py-1 text-xs bg-gray-100 text-gray-800 rounded-full" x-text="cat.name"></span>
+                                    </template>
+                                </div>
+                            </div>
+                        </template>
                     </div>
+
                     <!-- Detalles del servicio -->
                     <div class="mt-6">
                         <h2 class="text-lg font-semibold mb-2">Descripción del Servicio</h2>

@@ -19,6 +19,12 @@ class ServiceProvider extends Model
         'country',
         'rating',
         'review_count',
+        'status',          // Nuevo
+        'phone_number',    // Nuevo
+        'bio',             // Nuevo
+        'service_areas',   // Nuevo
+        'profile_picture', // Nuevo
+        'certification',   // Nuevo
         'is_verified',
     ];
 

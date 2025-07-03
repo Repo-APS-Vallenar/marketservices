@@ -9,7 +9,7 @@ class AdminUserSeeder extends Seeder
     public function run()
     {
         User::updateOrCreate(
-            ['email' => 'admin@clickmarkethogar.com'],
+            ['email' => 'jtrigo.corp@gmail.com'],
             [
                 'name' => 'Administrador',
                 'password' => Hash::make('admin1234'), // Cambia la contraseña luego

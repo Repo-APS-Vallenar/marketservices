@@ -26,43 +26,43 @@
                 <!-- Indicador de módulo actual -->
                 <div class="px-4 py-2 text-indigo-600 font-semibold text-sm border-b border-indigo-50 bg-indigo-50 text-center md:text-left md:text-sm text-base md:font-semibold font-bold">
                     @switch(true)
-                        @case(request()->routeIs('dashboard'))
-                            @php
-                                $userRole = auth()->user()->role;
-                                $dashboardText = match($userRole) {
-                                    'admin' => 'Dashboard Administrador',
-                                    'service_provider' => 'Dashboard Proveedor',
-                                    'customer' => 'Dashboard Cliente',
-                                    default => 'Dashboard'
-                                };
-                            @endphp
-                            {{ $dashboardText }}
-                            @break
-                        @case(request()->routeIs('profile.edit'))
-                            Perfil
-                            @break
-                        @case(request()->routeIs('services.*'))
-                            @if(auth()->user()->role === 'admin')
-                                Servicios Proveedor
-                            @else
-                                Servicios
-                            @endif
-                            @break
-                        @case(request()->routeIs('marketplace.services.*'))
-                            @if(auth()->user()->role === 'admin')
-                                Servicios Cliente
-                            @else
-                                Servicios
-                            @endif
-                            @break
-                        @case(request()->routeIs('bookings.*'))
-                            Reservas
-                            @break
-                        @case(request()->routeIs('messages.*'))
-                            Mensajes
-                            @break
-                        @default
-                            &nbsp;
+                    @case(request()->routeIs('dashboard'))
+                    @php
+                    $userRole = auth()->user()->role;
+                    $dashboardText = match($userRole) {
+                    'admin' => 'Dashboard Administrador',
+                    'service_provider' => 'Dashboard Proveedor',
+                    'customer' => 'Dashboard Cliente',
+                    default => 'Dashboard'
+                    };
+                    @endphp
+                    {{ $dashboardText }}
+                    @break
+                    @case(request()->routeIs('profile.edit'))
+                    Perfil
+                    @break
+                    @case(request()->routeIs('services.*'))
+                    @if(auth()->user()->role === 'admin')
+                    Servicios Proveedor
+                    @else
+                    Servicios
+                    @endif
+                    @break
+                    @case(request()->routeIs('marketplace.services.*'))
+                    @if(auth()->user()->role === 'admin')
+                    Servicios Cliente
+                    @else
+                    Servicios
+                    @endif
+                    @break
+                    @case(request()->routeIs('bookings.*'))
+                    Reservas
+                    @break
+                    @case(request()->routeIs('messages.*'))
+                    Mensajes
+                    @break
+                    @default
+                    &nbsp;
                     @endswitch
                 </div>
 
@@ -70,8 +70,8 @@
                 <nav class="flex-1 flex flex-col px-4 py-6 overflow-y-auto">
                     <div class="flex flex-col">
                         <!-- Dashboard -->
-                        <a href="{{ route('dashboard') }}" 
-                           class="block px-4 py-2 rounded hover:bg-indigo-100 hover:text-indigo-700 transition {{ request()->routeIs('dashboard') ? 'bg-indigo-100 text-indigo-700 font-semibold' : '' }}">
+                        <a href="{{ route('dashboard') }}"
+                            class="block px-4 py-2 rounded hover:bg-indigo-100 hover:text-indigo-700 transition {{ request()->routeIs('dashboard') ? 'bg-indigo-100 text-indigo-700 font-semibold' : '' }}">
                             <div class="flex items-center">
                                 <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
@@ -81,67 +81,80 @@
                         </a>
 
                         @if(auth()->user()->role === 'admin')
-                            <!-- Sección de Administración -->
-                            <div class="mt-8">
-                                <div class="px-4 mb-4">
-                                    <div class="text-xs font-semibold text-gray-400 uppercase tracking-wider">Administración</div>
-                                    <div class="mt-1 h-1 bg-gradient-to-r from-indigo-700 to-purple-500 rounded-full"></div>
-                                </div>
-                                
-                                <a href="{{ route('admin.users.index') }}" 
-                                   class="block px-4 py-2 mb-1 rounded hover:bg-indigo-100 hover:text-indigo-700 transition {{ request()->routeIs('admin.users.*') ? 'bg-indigo-100 text-indigo-700 font-semibold' : '' }}">
-                                    <div class="flex items-center">
-                                        <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path>
-                                        </svg>
-                                        Gestionar Usuarios
-                                    </div>
-                                </a>
-                                
-                                <a href="{{ route('admin.categories.index') }}" 
-                                   class="block px-4 py-2 mb-1 rounded hover:bg-indigo-100 hover:text-indigo-700 transition {{ request()->routeIs('admin.categories.*') ? 'bg-indigo-100 text-indigo-700 font-semibold' : '' }}">
-                                    <div class="flex items-center">
-                                        <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"></path>
-                                        </svg>
-                                        Gestionar Categorías
-                                    </div>
-                                </a>
-                                
-                                <a href="{{ route('admin.providers.pending') }}" 
-                                   class="block px-4 py-2 mb-1 rounded hover:bg-indigo-100 hover:text-indigo-700 transition {{ request()->routeIs('admin.providers.*') ? 'bg-indigo-100 text-indigo-700 font-semibold' : '' }}">
-                                    <div class="flex items-center">
-                                        <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                        </svg>
-                                        Proveedores Pendientes
-                                    </div>
-                                </a>
+                        <!-- Sección de Administración -->
+                        <div class="mt-8">
+                            <div class="px-4 mb-4">
+                                <div class="text-xs font-semibold text-gray-400 uppercase tracking-wider">Administración</div>
+                                <div class="mt-1 h-1 bg-gradient-to-r from-indigo-700 to-purple-500 rounded-full"></div>
                             </div>
 
-                            <!-- Sección de Módulos -->
-                            <div class="mt-8">
-                                <div class="px-4 mb-4">
-                                    <div class="text-xs font-semibold text-gray-400 uppercase tracking-wider">Módulos</div>
-                                    <div class="mt-1 h-1 bg-gradient-to-r from-indigo-700 to-purple-500 rounded-full"></div>
+                            <a href="{{ route('admin.users.index') }}"
+                                class="block px-4 py-2 mb-1 rounded hover:bg-indigo-100 hover:text-indigo-700 transition {{ request()->routeIs('admin.users.*') ? 'bg-indigo-100 text-indigo-700 font-semibold' : '' }}">
+                                <div class="flex items-center">
+                                    <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path>
+                                    </svg>
+                                    Gestionar Usuarios
                                 </div>
-                        @endif
+                            </a>
 
-                        <!-- Perfil -->
-                        <a href="{{ route('profile.edit') }}" 
-                           class="block px-4 py-2 mb-1 rounded hover:bg-indigo-100 hover:text-indigo-700 transition {{ request()->routeIs('profile.edit') ? 'bg-indigo-100 text-indigo-700 font-semibold' : '' }}">
-                            <div class="flex items-center">
-                                <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
-                                </svg>
-                                Perfil
+                            <a href="{{ route('admin.categories.index') }}"
+                                class="block px-4 py-2 mb-1 rounded hover:bg-indigo-100 hover:text-indigo-700 transition {{ request()->routeIs('admin.categories.*') ? 'bg-indigo-100 text-indigo-700 font-semibold' : '' }}">
+                                <div class="flex items-center">
+                                    <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"></path>
+                                    </svg>
+                                    Gestionar Categorías
+                                </div>
+                            </a>
+
+                            <a href="{{ route('admin.pending-providers.index') }}" :active="request()->routeIs('admin.pending-providers.*')"
+                                class="block px-4 py-2 mb-1 rounded hover:bg-indigo-100 hover:text-indigo-700 transition {{ request()->routeIs('admin.pending-providers.*') ? 'bg-indigo-100 text-indigo-700 font-semibold' : '' }}">
+                                <div class="flex items-center">
+                                    <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                    </svg>
+                                    Proveedores Pendientes
+                                </div>
+                            </a>
+                        </div>
+
+                        <!-- Sección de Módulos -->
+                        <div class="mt-8">
+                            <div class="px-4 mb-4">
+                                <div class="text-xs font-semibold text-gray-400 uppercase tracking-wider">Módulos</div>
+                                <div class="mt-1 h-1 bg-gradient-to-r from-indigo-700 to-purple-500 rounded-full"></div>
                             </div>
-                        </a>
+                            @endif
 
-                        <!-- Servicios -->
-                        @if(auth()->user()->role === 'admin')
-                            <a href="{{ route('services.index') }}" 
-                               class="block px-4 py-2 mb-1 rounded hover:bg-indigo-100 hover:text-indigo-700 transition {{ request()->routeIs('services.*') ? 'bg-indigo-100 text-indigo-700 font-semibold' : '' }}">
+                            <!-- Perfil -->
+                            <a href="{{ route('profile.edit') }}"
+                                class="block px-4 py-2 mb-1 rounded hover:bg-indigo-100 hover:text-indigo-700 transition {{ request()->routeIs('profile.edit') ? 'bg-indigo-100 text-indigo-700 font-semibold' : '' }}">
+                                <div class="flex items-center">
+                                    <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                                    </svg>
+                                    Perfil
+                                </div>
+                            </a>
+                            {{-- Enlace al Perfil de Proveedor (solo para service_provider) --}}
+                            @if(Auth::user()->role === 'service_provider')
+                            <a href="{{ route('provider.profile.edit') }}"
+                                class="block px-4 py-2 mb-1 rounded hover:bg-indigo-100 hover:text-indigo-700 transition {{ request()->routeIs('provider.profile.edit') ? 'bg-indigo-100 text-indigo-700 font-semibold' : '' }}">
+                                <div class="flex items-center">
+                                    {{-- Puedes usar un icono diferente si lo deseas, o el mismo si es apropiado --}}
+                                    <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
+                                    </svg>
+                                    Perfil de Proveedor
+                                </div>
+                            </a>
+                            @endif
+
+                            <!-- Servicios -->
+                            @if(auth()->user()->role === 'admin')
+                            <a href="{{ route('services.index') }}"
+                                class="block px-4 py-2 mb-1 rounded hover:bg-indigo-100 hover:text-indigo-700 transition {{ request()->routeIs('services.*') ? 'bg-indigo-100 text-indigo-700 font-semibold' : '' }}">
                                 <div class="flex items-center">
                                     <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
@@ -149,8 +162,8 @@
                                     Servicios Proveedor
                                 </div>
                             </a>
-                            <a href="{{ route('marketplace.services.index') }}" 
-                               class="block px-4 py-2 mb-1 rounded hover:bg-indigo-100 hover:text-indigo-700 transition {{ request()->routeIs('marketplace.services.*') ? 'bg-indigo-100 text-indigo-700 font-semibold' : '' }}">
+                            <a href="{{ route('marketplace.services.index') }}"
+                                class="block px-4 py-2 mb-1 rounded hover:bg-indigo-100 hover:text-indigo-700 transition {{ request()->routeIs('marketplace.services.*') ? 'bg-indigo-100 text-indigo-700 font-semibold' : '' }}">
                                 <div class="flex items-center">
                                     <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
@@ -158,9 +171,9 @@
                                     Servicios Cliente
                                 </div>
                             </a>
-                        @elseif(auth()->user()->role === 'service_provider')
-                            <a href="{{ route('services.index') }}" 
-                               class="block px-4 py-2 mb-1 rounded hover:bg-indigo-100 hover:text-indigo-700 transition {{ request()->routeIs('services.*') ? 'bg-indigo-100 text-indigo-700 font-semibold' : '' }}">
+                            @elseif(auth()->user()->role === 'service_provider')
+                            <a href="{{ route('services.index') }}"
+                                class="block px-4 py-2 mb-1 rounded hover:bg-indigo-100 hover:text-indigo-700 transition {{ request()->routeIs('services.*') ? 'bg-indigo-100 text-indigo-700 font-semibold' : '' }}">
                                 <div class="flex items-center">
                                     <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
@@ -168,9 +181,9 @@
                                     Servicios
                                 </div>
                             </a>
-                        @elseif(auth()->user()->role === 'customer')
-                            <a href="{{ route('marketplace.services.index') }}" 
-                               class="block px-4 py-2 mb-1 rounded hover:bg-indigo-100 hover:text-indigo-700 transition {{ request()->routeIs('marketplace.services.*') ? 'bg-indigo-100 text-indigo-700 font-semibold' : '' }}">
+                            @elseif(auth()->user()->role === 'customer')
+                            <a href="{{ route('marketplace.services.index') }}"
+                                class="block px-4 py-2 mb-1 rounded hover:bg-indigo-100 hover:text-indigo-700 transition {{ request()->routeIs('marketplace.services.*') ? 'bg-indigo-100 text-indigo-700 font-semibold' : '' }}">
                                 <div class="flex items-center">
                                     <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
@@ -178,29 +191,29 @@
                                     Servicios
                                 </div>
                             </a>
-                        @endif
+                            @endif
 
-                        <!-- Reservas y Mensajes -->
-                        <a href="{{ route('bookings.index') }}" 
-                           class="block px-4 py-2 mb-1 rounded hover:bg-indigo-100 hover:text-indigo-700 transition {{ request()->routeIs('bookings.*') ? 'bg-indigo-100 text-indigo-700 font-semibold' : '' }}">
-                            <div class="flex items-center">
-                                <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-                                </svg>
-                                Reservas
-                            </div>
-                        </a>
-                        
-                        <a href="{{ route('messages.index') }}" 
-                           class="block px-4 py-2 mb-1 rounded hover:bg-indigo-100 hover:text-indigo-700 transition {{ request()->routeIs('messages.*') ? 'bg-indigo-100 text-indigo-700 font-semibold' : '' }}">
-                            <div class="flex items-center">
-                                <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"></path>
-                                </svg>
-                                Mensajes
-                            </div>
-                        </a>
-                    </div>
+                            <!-- Reservas y Mensajes -->
+                            <a href="{{ route('bookings.index') }}"
+                                class="block px-4 py-2 mb-1 rounded hover:bg-indigo-100 hover:text-indigo-700 transition {{ request()->routeIs('bookings.*') ? 'bg-indigo-100 text-indigo-700 font-semibold' : '' }}">
+                                <div class="flex items-center">
+                                    <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                                    </svg>
+                                    Reservas
+                                </div>
+                            </a>
+
+                            <a href="{{ route('messages.index') }}"
+                                class="block px-4 py-2 mb-1 rounded hover:bg-indigo-100 hover:text-indigo-700 transition {{ request()->routeIs('messages.*') ? 'bg-indigo-100 text-indigo-700 font-semibold' : '' }}">
+                                <div class="flex items-center">
+                                    <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"></path>
+                                    </svg>
+                                    Mensajes
+                                </div>
+                            </a>
+                        </div>
                 </nav>
             </div>
 

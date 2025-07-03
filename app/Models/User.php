@@ -55,7 +55,7 @@ class User extends Authenticatable
      * Get the bookings for the customer.
      * Relación para obtener las reservas de un usuario (cuando actúa como cliente).
      */
-    public function bookings() // Nombre de la relación
+    public function customerBookings() // Nombre de la relación
     {
         return $this->hasMany(Booking::class, 'customer_id');
     }
